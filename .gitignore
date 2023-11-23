@@ -1,4 +1,6 @@
 target
 generated
 Config.toml
+configure_demo.sh
+
 .env

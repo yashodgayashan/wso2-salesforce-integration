@@ -17,7 +17,7 @@
 import ballerina/os;
 
 // Configurable variables.
-public configurable string baseUrl = check getValueFromEnvVariables("IS_BASE_URL", "https://localhost:9443");
+public configurable string baseUrl = check getValueFromEnvVariables("IS_BASE_URL", "https://is.wso2isdemo.com");
 public configurable string tenantDomain = check getValueFromEnvVariables("TENANT_DOMAIN", "carbon.super");
 public configurable string b2bAppClientID = check getValueFromEnvVariables("CLIENT_ID", "");
 public configurable string b2bAppClientSecret = check getValueFromEnvVariables("CLIENT_SECRET", "");
