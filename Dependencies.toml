@@ -5,7 +5,7 @@
 
 [ballerina]
 dependencies-toml-version = "2"
-distribution-version = "2201.8.2"
+distribution-version = "2201.8.3"
 
 [[package]]
 org = "PasinduYeshan"
@@ -14,7 +14,6 @@ version = "0.1.0"
 dependencies = [
 	{org = "ballerina", name = "http"},
 	{org = "ballerina", name = "mime"},
-	{org = "ballerina", name = "os"},
 	{org = "ballerinai", name = "observe"}
 ]
 modules = [
@@ -262,9 +261,6 @@ version = "1.8.0"
 dependencies = [
 	{org = "ballerina", name = "io"},
 	{org = "ballerina", name = "jballerina.java"}
-]
-modules = [
-	{org = "ballerina", packageName = "os", moduleName = "os"}
 ]
 
 [[package]]

@@ -14,16 +14,11 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import ballerina/os;
-
-// Configurable variables.
-public configurable string baseUrl = check getValueFromEnvVariables("IS_BASE_URL", "https://is.wso2isdemo.com");
-public configurable string tenantDomain = check getValueFromEnvVariables("TENANT_DOMAIN", "carbon.super");
-public configurable string applicationRoleName = check getValueFromEnvVariables("ROLE_NAME", "Administrator");
-
-//  Variables.
-public string TRUSTSTORE_PATH = "/Users/pasindu/project/is/wso2is-7.0.0-beta2-SNAPSHOT/repository/resources/security/client-truststore.jks";
-public string TRUSTSTORE_PASSWORD = "wso2carbon";
+public configurable string baseUrl = "https://is.wso2isdemo.com";
+public configurable string tenantDomain = "carbon.super";
+public configurable string applicationRoleName = "Administrator";
+public configurable string b2bAppClientID = ?;
+public configurable string b2bAppClientSecret = ?;
 
 // Endpoints.
 public string tokenEndpoint =  baseUrl + "/oauth2/token";
@@ -33,8 +28,4 @@ public string createUserEndpoint = baseUrl + "/t/" + tenantDomain + "/o/scim2/Us
 public string adminRoleIdEndpoint = baseUrl + "/t/" + tenantDomain + "/o/scim2/v2/Roles?filter=name%20eq%20admin";
 public string assignAdminRole = baseUrl + "/t/" + tenantDomain + "/o/scim2/v2/Roles/{admin-role-id}";
 
-function getValueFromEnvVariables(string variable, string defaultValue) returns string|error {
-    string value = os:getEnv(variable);
-    return value != "" ? value : defaultValue;
-}
 
