@@ -19,8 +19,7 @@ import ballerina/os;
 // Configurable variables.
 public configurable string baseUrl = check getValueFromEnvVariables("IS_BASE_URL", "https://is.wso2isdemo.com");
 public configurable string tenantDomain = check getValueFromEnvVariables("TENANT_DOMAIN", "carbon.super");
-public configurable string b2bAppClientID = check getValueFromEnvVariables("CLIENT_ID", "");
-public configurable string b2bAppClientSecret = check getValueFromEnvVariables("CLIENT_SECRET", "");
+public configurable string applicationRoleName = check getValueFromEnvVariables("ROLE_NAME", "Administrator");
 
 //  Variables.
 public string TRUSTSTORE_PATH = "/Users/pasindu/project/is/wso2is-7.0.0-beta2-SNAPSHOT/repository/resources/security/client-truststore.jks";

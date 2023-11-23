@@ -52,7 +52,7 @@ public function createSubOrganizationAdmin(models:SalesforcePayload payload) ret
     }
 
     // Get admin role id.
-    string|error adminRoleId = getAdminRoleId(<string>subOrganizationToken);
+    string|error adminRoleId = getApplicationRoleId(<string>subOrganizationToken);
     if adminRoleId is error {
         return <http:InternalServerError> {body: "Error while getting admin role id."};
     }
@@ -70,13 +70,7 @@ function getAccessToken() returns string|error {
 
     http:Client clientTokenEndpoint = check new (
         config:tokenEndpoint, 
-        httpVersion = http:HTTP_1_1, 
-        secureSocket = {
-            cert: {
-                path: config:TRUSTSTORE_PATH,
-                password: config:TRUSTSTORE_PASSWORD
-            }
-        }
+        httpVersion = http:HTTP_1_1
     );
 
     json tokenResponse = check clientTokenEndpoint->post(
@@ -99,13 +93,7 @@ function isOrganizationNameAvailable(string organizationName, string accessToken
 
     http:Client checkOrganizationNameEndpoint = check new (
         config:organizationEndpoint, 
-        httpVersion = http:HTTP_1_1, 
-        secureSocket = {
-            cert: {
-                path: config:TRUSTSTORE_PATH,
-                password: config:TRUSTSTORE_PASSWORD
-            }
-        }
+        httpVersion = http:HTTP_1_1
     );
 
     json organizationNameAvailabilityResponse = check checkOrganizationNameEndpoint->post(
@@ -127,13 +115,7 @@ function createOrganization(string organizationName, string accessToken) returns
 
     http:Client createSubOrganizationEndpoint = check new (
         config:organizationEndpoint, 
-        httpVersion = http:HTTP_1_1, 
-        secureSocket = {
-            cert: {
-                path: config:TRUSTSTORE_PATH,
-                password: config:TRUSTSTORE_PASSWORD
-            }
-        }
+        httpVersion = http:HTTP_1_1
     );
 
     http:Response response = check createSubOrganizationEndpoint->post(
@@ -162,13 +144,7 @@ function getSubOrganizationToken(string accessToken, string subOrganizationId) r
 
     http:Client clientTokenEndpoint = check new (
         config:tokenEndpoint, 
-        httpVersion = http:HTTP_1_1, 
-        secureSocket = {
-            cert: {
-                path: config:TRUSTSTORE_PATH,
-                password: config:TRUSTSTORE_PASSWORD
-            }
-        }
+        httpVersion = http:HTTP_1_1
     );
 
     json tokenResponse = check clientTokenEndpoint->post(
@@ -189,21 +165,15 @@ function getSubOrganizationToken(string accessToken, string subOrganizationId) r
 }
 
 // Get the admin role id.
-function getAdminRoleId(string subOrgAccessToken) returns string|error {
+function getApplicationRoleId(string subOrgAccessToken) returns string|error {
 
     http:Client getAdminRoleIdEndpoint = check new (
         config:scimEndpoint, 
-        httpVersion = http:HTTP_1_1, 
-        secureSocket = {
-            cert: {
-                path: config:TRUSTSTORE_PATH,
-                password: config:TRUSTSTORE_PASSWORD
-            }
-        }
+        httpVersion = http:HTTP_1_1
     );
 
     json adminRoleIdResponse = check getAdminRoleIdEndpoint->get(
-        "/v2/Roles?filter=displayName%20eq%20admin",
+        string `/v2/Roles?filter=displayName%20eq%20${config:applicationRoleName}`,
         {
             "Authorization": string `Bearer ${subOrgAccessToken}`
         }
@@ -226,13 +196,7 @@ function createUser(models:SalesforcePayload salesForcePayload, string adminRole
 
     http:Client scimEndpoint = check new (
         config:scimEndpoint, 
-        httpVersion = http:HTTP_1_1, 
-        secureSocket = {
-            cert: {
-                path: config:TRUSTSTORE_PATH,
-                password: config:TRUSTSTORE_PASSWORD
-            }
-        }
+        httpVersion = http:HTTP_1_1
     );
 
     json userCreation = {
