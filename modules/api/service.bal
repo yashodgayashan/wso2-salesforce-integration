@@ -58,23 +58,11 @@ public function createSubOrganizationAdmin(models:SalesforcePayload payload) ret
     }
 
     // Create a user in the sub organization.
-    http:Response|error createUserResponse = createUser(payload, <string> adminRoleId, <string>subOrganizationToken);
-    if createUserResponse is error {
+    http:Response|error userResponse = createUser(payload, <string> adminRoleId, <string>subOrganizationToken);
+    if userResponse is error {
         return <http:InternalServerError> {body: "Error while creating user."};
     }
-    return createUserResponse;
-
-    // // Assign user to admin role.
-    // http:Response|error assignUserToAdminRoleResponse = assignUserToAdminRole(
-    //     payload.username, <string>adminRoleId, <string>subOrganizationToken);
-    // if assignUserToAdminRoleResponse is error {
-    //     return <http:InternalServerError> {body: "Error while assigning user to admin role."};
-    // }
-    // if (assignUserToAdminRoleResponse.statusCode != 200) {
-    //     return assignUserToAdminRoleResponse;
-    // }
-
-    // return <http:Created> {body: "Sub organization admin created successfully."};
+    return userResponse;
 }
 
 // Get access token from the token endpoint.
@@ -309,41 +297,3 @@ function createUser(models:SalesforcePayload salesForcePayload, string adminRole
         mime:APPLICATION_JSON
     );
 }
-
-// // Assign user to admin role.
-// function assignUserToAdminRole(string userId, string adminRoleId, string subOrgAccessToken) returns http:Response|error {
-
-//     http:Client assignUserToAdminRoleEndpoint = check new (
-//         config:scimEndpoint, 
-//         httpVersion = http:HTTP_1_1, 
-//         secureSocket = {
-//             cert: {
-//                 path: config:TRUSTSTORE_PATH,
-//                 password: config:TRUSTSTORE_PASSWORD
-//             }
-//         }
-//     );
-
-//     json requestBody = {
-//         "Operations": [
-//             {
-//                 "op": "add",
-//                 "value": {
-//                     "users": [
-//                         {
-//                             "value": string `${userId}`
-//                         }
-//                     ]
-//                 }
-//             }
-//         ]
-//     };
-//     return check assignUserToAdminRoleEndpoint->patch(
-//         "/v2/Roles/" + adminRoleId,
-//         requestBody,
-//         {
-//             "Authorization": string `Bearer ${subOrgAccessToken}`
-//         },
-//         mime:APPLICATION_JSON
-//     );
-// }
